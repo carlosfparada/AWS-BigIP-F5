@@ -1,0 +1,57 @@
+---
+
+- name: BigIP F5 provisioning
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  
+  tasks:
+    - include_vars: ../defaults/main.yml
+    #- include_vars: ../vaults/f5_vault.yml
+
+    - name: Create F5 Nodes (OPTIONAL)
+      bigip_node:
+        provider: "{{ f5_provider }}"
+        host: "{{ hostvars[item].ansible_host }}"
+        name: "{{ hostvars[item].inventory_hostname }}"
+      loop: "{{ groups['webserver'] }}"
+
+    - name: Create F5 Pools
+      bigip_pool: 
+        provider: "{{ f5_provider }}"
+        name: www_pool
+        lb_method: "round-robin"
+        monitors: "/Common/http"
+        monitor_type: "and_list"
+        state: present
+      notify: save config
+
+    - name: Add Pool Members
+      bigip_pool_member:
+        provider: "{{ f5_provider }}"
+        port: "{{ hostvars[item].port }}"
+        name: "{{ hostvars[item].inventory_hostname }}"
+        host: "{{ hostvars[item].ansible_host }}"
+        pool: www_pool
+      loop: "{{ groups['webserver'] }}"
+      notify: save config
+
+    - name: Add Virtual Server
+      bigip_virtual_server:
+        provider: "{{ f5_provider }}"
+        name: "vip"
+        destination: "{{ f5_provider.server }}"
+        port: "443"
+        enabled_vlans: "all"
+        all_profiles: ['http','clientssl']
+        pool: www_pool
+        snat: "Automap"
+      notify: save config
+      register: vservercache
+
+    - name: Delay after virtual server changed
+      wait_for:
+        timeout: 5
+      when: vservercache.changed
+
+

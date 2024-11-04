@@ -1,0 +1,55 @@
+---
+
+# https://community.f5.com/kb/technicalarticles/how-to-get-a-f5-trial-or-lab-license/279051
+
+# defaults file for f5-bigip
+f5_licenses: [BZBZB-YGHOS-XVCRO-KZDZD-HKRBLTZ]
+#f5_licenses: [QASQX-QKSRU-UNQYR-WMPZR-SMUIONM]
+#BIG-IQ Virtual Edition (VE)	AFYAN-WMUFLL-UDP-MUSLNVX-IOGUEYD
+#BIG-IQ Centralized Management (CM)	JSLNI-MUEAPN-XUG-MNMFQVF-FANSKKL
+#BIG-IP Virtual Edition (VE)	NGWRI-UYLNY-IFLVF-QZSRU-BXBZLKI
+#BIG-IP Virtual Edition (VE)	QASQX-QKSRU-UNQYR-WMPZR-SMUIONM
+#BIG-IQ Centralized Management (CM) TPSNA-RDUVXK-CJT-JRGOLUW-GRDIJRB
+#BIG-IQ Virtual Edition (VE)	OSOXU-TJPVQC-OSV-DUJRUPI-VCYFLVG
+
+f5_license: 1234-1234-1234-1234
+f5_provider_server_port: 443
+f5_provider_password: Rfc1918!
+# present / absent
+f5_license_state: present
+
+f5_provider:
+  server: "{{ hostvars['f5-bigip-1'].ansible_host }}" #"{{ ansible_host }}"
+  user: admin
+  validate_certs: no
+  password: "{{ f5_provider_password }}"
+  server_port: "{{ f5_provider_server_port }}"
+
+f5_device_info_subset:
+#  - all
+  - system-info
+  - nodes
+  - ltm-pools
+  - virtual-addresses
+  - virtual-servers
+
+f5_reverse_dest: tower
+
+f5_pools: [www_pool1, www_pool2]
+
+input_webservers: [webserver-1]
+f5_pool: www_pool
+input_member_state: enabled
+
+f5_tower_username: admin
+f5_tower_password: Rfc1918!
+f5_tower_host: https://172.16.1.45
+f5_tower_inventory: reverse-f5
+
+report_webserver: webserver-2
+report_folder: /var/www/html/
+
+pm: []
+
+backup_server: "backup-server"
+backup_server_folder: "/tmp/backup/"

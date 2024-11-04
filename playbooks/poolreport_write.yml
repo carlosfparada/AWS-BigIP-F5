@@ -1,0 +1,70 @@
+---
+
+- name: BigIP F5 write
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - include_vars: ../defaults/main.yml
+    #- include_vars: ../vaults/f5_vault.yml
+
+
+    - name: Ensure data folder exists
+      file: 
+        path: "{{ report_folder }}"
+        state: directory
+      become: true
+      tags: [always]
+
+    - name: Clean old reports and files
+      file: 
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ report_folder }}poolindex.html"
+        - "{{ report_folder }}main.css"
+        - "{{ report_folder }}red.png"
+        - "{{ report_folder }}green.png"
+      become: true
+      tags: [always]
+
+    - name: Clean old member reports
+      file: 
+        path: "{{ report_folder }}{{ item.name }}_members.html"
+        state: absent
+      loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
+      loop_control:
+        label: "{{ item.name }}"
+      become: true
+      tags: [always]
+
+    - name: Copy static files
+      copy:
+        src: "../files/{{ item }}"
+        dest: "{{ report_folder }}{{item}}"
+      loop:
+        - main.css
+        - red.png
+        - green.png
+      become: true
+      tags: [always]
+
+    - name: Generate pool report
+      template: 
+        src: "../templates/poolindex.j2"
+        dest: "{{ report_folder }}poolindex.html"
+      become: true
+      tags: [always]
+
+    - name: Generate pool member report 
+      template: 
+        src: "../templates/memberlist.j2"
+        dest: "{{ report_folder }}{{ item.name }}_members.html"
+      loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
+      loop_control:
+        label: "{{ item.name }}"
+      become: true
+      tags: [always]
+
+

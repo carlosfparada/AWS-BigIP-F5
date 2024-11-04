@@ -1,0 +1,55 @@
+---
+
+- name: Find F5 UCS backup Files
+  hosts: backup-server
+  #connection: ssh
+  tasks:
+  - include_vars: ../defaults/main.yml
+
+  - name: Find latest backup filename
+    ansible.builtin.find:
+      paths: "{{ backup_server_folder }}"
+      file_type: file
+      patterns: 'f5*'
+      # hidden: true
+      use_regex: false
+    become: yes
+    register: backup_files
+
+  - name: Get lastest backup ({{ (backup_files.files|last).path }})
+    set_fact: 
+      backup_file: "{{ (backup_files.files | last).path }}"
+
+  - name: Fetch config from backup
+    fetch:
+      src: "{{ backup_file }}"
+      dest: "/tmp/backup.ucs"
+      flat: true
+    when: backup_files | length > 0 
+    register: tmp_backup_file
+
+
+- name: BigIP F5 restore from UCS
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - include_vars: ../defaults/main.yml
+
+    # - name: Downloads (upload) UCS (User Configuration Set)
+    #   f5networks.f5_modules.bigip_ucs:
+    #     provider: "{{ f5_provider }}"
+    #     state: present
+    #     ucs: "/tmp/backup.ucs"
+
+    # https://github.com/F5Networks/f5-ansible/issues/1666
+    - name: Install (upload + install) UCS (User Configuration Set)
+      f5networks.f5_modules.bigip_ucs:
+        provider: "{{ f5_provider }}"
+        state: installed
+        ucs: "/tmp/backup.ucs"
+        #force: true
+        # no_license: yes
+        # no_platform_check: yes
+      ignore_errors: true

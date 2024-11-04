@@ -1,0 +1,89 @@
+---
+
+- name: BigIP F5 read
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - include_vars: ../defaults/main.yml
+
+    - name: Collect F5 data (ltm-pools)
+      f5networks.f5_modules.bigip_device_info:
+        provider: "{{ f5_provider }}"
+        gather_subset:
+          - ltm-pools
+      connection: local
+      register: _pools
+      tags: [always]
+
+    - name: Debug facts
+      debug:
+        var: _pools
+      connection: local
+      tags: [always]
+      
+    - name: Ensure data folder exists
+      file: 
+        path: "{{ report_folder }}"
+        state: directory
+      become: true
+      tags: [always]
+      delegate_to: "{{ report_webserver }}"
+
+    - name: Clean old reports and files
+      file: 
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ report_folder }}poolindex.html"
+        - "{{ report_folder }}main.css"
+        - "{{ report_folder }}red.png"
+        - "{{ report_folder }}green.png"
+      become: true
+      delegate_to: "{{ report_webserver }}"
+      tags: [always]
+
+    - name: Clean old member reports
+      file: 
+        path: "{{ report_folder }}{{ item.name }}_members.html"
+        state: absent
+      loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
+      loop_control:
+        label: "{{ item.name }}"
+      become: true
+      delegate_to: "{{ report_webserver }}"
+      tags: [always]
+
+    - name: Copy static files
+      copy:
+        src: "../files/{{ item }}"
+        dest: "{{ report_folder }}{{item}}"
+      loop:
+        - main.css
+        - red.png
+        - green.png
+      become: true
+      delegate_to: "{{ report_webserver }}"
+      tags: [always]
+
+    - name: Generate pool report
+      template: 
+        src: "../templates/poolindex.j2"
+        dest: "{{ report_folder }}poolindex.html"
+      become: true
+      delegate_to: "{{ report_webserver }}"
+      tags: [always]
+
+    - name: Generate pool member report 
+      template: 
+        src: "../templates/memberlist.j2"
+        dest: "{{ report_folder }}{{ item.name }}_members.html"
+      loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
+      loop_control:
+        label: "{{ item.name }}"
+      become: true
+      delegate_to: "{{ report_webserver }}"
+      tags: [always]
+
+
