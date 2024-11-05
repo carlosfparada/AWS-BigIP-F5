@@ -13,7 +13,7 @@ f5_licenses: [BZBZB-YGHOS-XVCRO-KZDZD-HKRBLTZ]
 #BIG-IQ Virtual Edition (VE)	OSOXU-TJPVQC-OSV-DUJRUPI-VCYFLVG
 
 f5_license: 1234-1234-1234-1234
-f5_provider_server_port: 8443
+f5_provider_server_port: 8100 #8443
 f5_provider_password: "admin123$%&"
 # present / absent
 f5_license_state: present
