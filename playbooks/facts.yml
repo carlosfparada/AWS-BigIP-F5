@@ -7,7 +7,6 @@
 
   tasks:
     - include_vars: ../defaults/main.yml
-    #- include_vars: ../vaults/f5_vault.yml
 
     - debug:
         var: f5_provider
