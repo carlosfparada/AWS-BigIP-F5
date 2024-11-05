@@ -1,8 +1,8 @@
 ---
 
 - name: BigIP F5 provisioning
-  hosts: localhost
-  #connection: local
+  hosts: "{{ f5_provider.server }}"
+  connection: local
   gather_facts: no
 
   tasks:
