@@ -18,12 +18,21 @@ f5_provider_password: "admin123$%&"
 # present / absent
 f5_license_state: present
 
+# f5_provider:
+#   server: "{{ hostvars['f5-bigip-1'].ansible_host }}" #"{{ ansible_host }}"
+#   server_port: "{{ f5_provider_server_port }}"
+#   transport: rest
+#   user: admin
+#   password: "{{ f5_provider_password }}"
+#   validate_certs: false
+#   no_f5_teem: false
+
 f5_provider:
-  server: "{{ hostvars['f5-bigip-1'].ansible_host }}" #"{{ ansible_host }}"
-  server_port: "{{ f5_provider_server_port }}"
+  server: "34.224.91.62"
+  server_port: "8443"
   transport: rest
   user: admin
-  password: "{{ f5_provider_password }}"
+  password: "admin123$%&"
   validate_certs: false
   no_f5_teem: false
 
