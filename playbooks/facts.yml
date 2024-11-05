@@ -17,12 +17,7 @@
         provider: "{{ f5_provider }}"
         gather_subset: "{{ f5_device_info_subset }}"
       register: _f5_facts
-      tags: [always]
 
     - name: Device Info output
       debug: 
         msg: "{{ _f5_facts }}"
-      tags: [always]
-
-  handlers:
-    - import_tasks: ../handlers/main.yml
