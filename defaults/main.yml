@@ -28,11 +28,11 @@ f5_license_state: present
 #   no_f5_teem: false
 
 f5_provider:
-  server: "34.224.91.62"
-  server_port: "8443"
+  server: "172.16.2.201"
+  server_port: "443"
   transport: rest
   user: admin
-  password: "admin123$%&"
+  password: "Rfc1918!"
   validate_certs: false
   no_f5_teem: false
 
