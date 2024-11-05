@@ -24,7 +24,7 @@ f5_provider:
   transport: rest
   user: admin
   password: "{{ f5_provider_password }}"
-  validate_certs: no
+  validate_certs: false
   no_f5_teem: false
 
 
