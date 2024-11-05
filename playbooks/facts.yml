@@ -9,6 +9,9 @@
     - include_vars: ../defaults/main.yml
     #- include_vars: ../vaults/f5_vault.yml
 
+    - debug:
+        var: provider
+
     - name: gather facts
       f5networks.f5_modules.bigip_device_info:
         provider: "{{ f5_provider }}"
