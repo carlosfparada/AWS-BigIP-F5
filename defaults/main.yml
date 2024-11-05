@@ -25,7 +25,7 @@ f5_provider:
   user: admin
   password: "{{ f5_provider_password }}"
   validate_certs: false
-  no_f5_teem: true
+  no_f5_teem: false
 
 f5_device_info_subset:
 #  - all
