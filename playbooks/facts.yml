@@ -10,7 +10,7 @@
     #- include_vars: ../vaults/f5_vault.yml
 
     - debug:
-        var: provider
+        var: f5_provider
 
     - name: gather facts
       f5networks.f5_modules.bigip_device_info:
