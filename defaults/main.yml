@@ -27,7 +27,6 @@ f5_provider:
   validate_certs: false
   no_f5_teem: false
 
-
 f5_device_info_subset:
 #  - all
   - system-info
