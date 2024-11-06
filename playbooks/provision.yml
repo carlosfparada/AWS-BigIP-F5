@@ -19,7 +19,7 @@
       bigip_pool: 
         provider: "{{ f5_provider }}"
         name: "{{ item.name }}"
-        lb_method: "{{ item-lb_method }}"
+        lb_method: "{{ item.lb_method }}"
         monitors: "{{ item.monitors }}"
         monitor_type: "{{ item.monitor_type }}"
         state: present
@@ -32,7 +32,7 @@
         port: "{{ item.port }}"
         host: "{{ item.host }}"
         name: "{{ item.name }}"
-        name: "{{ item.pool }}"
+        pool: "{{ item.pool }}"
       loop: "{{ pool_members }}"
       notify: save config
 
