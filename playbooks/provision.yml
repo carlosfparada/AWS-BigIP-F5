@@ -39,14 +39,15 @@
     - name: Add Virtual Server
       bigip_virtual_server:
         provider: "{{ f5_provider }}"
-        name: "vip"
+        name: "{{ item.name }}"
         destination: "{{ f5_provider.server }}"
-        port: "443"
-        enabled_vlans: "all"
-        all_profiles: ['http','clientssl']
-        pool: www_pool
-        snat: "Automap"
+        port: "{{ item.port }}"
+        enabled_vlans: "{{ item.enabled_vlans }}"
+        all_profiles: "{{ item.all_profiles }}"
+        pool: "{{ item.pool }}"
+        snat: "{{ item.snat }}"
       notify: save config
+      loop: "{{ virtual_servers }}"
       register: vservercache
 
     - name: Delay after virtual server changed
