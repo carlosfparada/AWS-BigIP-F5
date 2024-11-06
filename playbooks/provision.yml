@@ -7,33 +7,33 @@
   
   tasks:
     - include_vars: ../defaults/main.yml
-    #- include_vars: ../vaults/f5_vault.yml
 
-    - name: Create F5 Nodes (OPTIONAL)
+    - name: Create F5 Nodes
       bigip_node:
         provider: "{{ f5_provider }}"
-        host: "{{ hostvars[item].ansible_host }}"
-        name: "{{ hostvars[item].inventory_hostname }}"
-      loop: "{{ groups['webserver'] }}"
+        host: "{{ item.host }}"
+        name: "{{ item.name }}"
+      loop: "{{ nodes }}"
 
     - name: Create F5 Pools
       bigip_pool: 
         provider: "{{ f5_provider }}"
-        name: www_pool
-        lb_method: "round-robin"
-        monitors: "/Common/http"
-        monitor_type: "and_list"
+        name: "{{ item.name }}"
+        lb_method: "{{ item-lb_method }}"
+        monitors: "{{ item.monitors }}"
+        monitor_type: "{{ item.monitor_type }}"
         state: present
       notify: save config
+      loop: "{{ pools }}"
 
     - name: Add Pool Members
       bigip_pool_member:
         provider: "{{ f5_provider }}"
-        port: "{{ hostvars[item].port }}"
-        name: "{{ hostvars[item].inventory_hostname }}"
-        host: "{{ hostvars[item].ansible_host }}"
-        pool: www_pool
-      loop: "{{ groups['webserver'] }}"
+        port: "{{ item.port }}"
+        host: "{{ item.host }}"
+        name: "{{ item.name }}"
+        name: "{{ item.pool }}"
+      loop: "{{ pool_members }}"
       notify: save config
 
     - name: Add Virtual Server

@@ -64,3 +64,48 @@ pm: []
 
 backup_server: "backup-server"
 backup_server_folder: "/tmp/backup/"
+
+# CMDB
+nodes:
+  - name: "webserver-1"
+    host: "172.16.2.200"
+  - name: "webserver-2"
+    host: "172.16.2.199"
+  - name: "webserver-21"
+    host: "172.16.2.198"
+  - name: "webserver-22"
+    host: "172.16.2.197"
+
+pools:
+  - name: www_pool
+    lb_method: "round-robin"
+    monitors: "/Common/http"
+    monitor_type: "and_list"
+
+pool_members:
+  - name: "webserver-1"
+    host: "172.16.2.200"
+    port: 80
+    pool: www_pool
+  - name: "webserver-2"
+    host: "172.16.2.199"
+    port: 80
+    pool: www_pool
+  - name: "webserver-21"
+    host: "172.16.2.198"
+    port: 80
+    pool: www_pool
+  - name: "webserver-22"
+    host: "172.16.2.197"
+    port: 80
+    pool: www_pool
+
+virtual_servers:
+  name: "vip"
+  port: "443"
+  enabled_vlans: "all"
+  all_profiles:
+    - 'http'
+    - 'clientssl'
+  pool: www_pool
+  snat: "Automap"
