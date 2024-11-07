@@ -32,6 +32,7 @@
         host: "{{ item.host }}"
         name: "{{ item.name }}"
         pool: "{{ item.pool }}"
+        state: present
       loop: "{{ pool_members }}"
 
     - name: Add Virtual Server
@@ -44,6 +45,7 @@
         all_profiles: "{{ item.all_profiles }}"
         pool: "{{ item.pool }}"
         snat: "{{ item.snat }}"
+        state: present
       loop: "{{ virtual_servers }}"
       register: vservercache
 
