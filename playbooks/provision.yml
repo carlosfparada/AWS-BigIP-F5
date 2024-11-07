@@ -55,4 +55,5 @@
         timeout: 5
       when: vservercache.changed
 
-
+  handlers:
+    - import_tasks: ../handlers/main.yml
