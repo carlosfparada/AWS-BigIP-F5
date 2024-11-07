@@ -101,11 +101,11 @@ pool_members:
     pool: www_pool
 
 virtual_servers:
-  name: "vip"
-  port: "443"
-  enabled_vlans: "all"
-  all_profiles:
-    - 'http'
-    - 'clientssl'
-  pool: www_pool
-  snat: "Automap"
+  - name: "vip"
+    port: "443"
+    enabled_vlans: "all"
+    all_profiles:
+      - 'http'
+      - 'clientssl'
+    pool: www_pool
+    snat: "Automap"
