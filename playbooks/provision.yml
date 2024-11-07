@@ -23,7 +23,6 @@
         monitors: "{{ item.monitors }}"
         monitor_type: "{{ item.monitor_type }}"
         state: present
-      notify: save config
       loop: "{{ pools }}"
 
     - name: Add Pool Members
@@ -34,7 +33,6 @@
         name: "{{ item.name }}"
         pool: "{{ item.pool }}"
       loop: "{{ pool_members }}"
-      notify: save config
 
     - name: Add Virtual Server
       bigip_virtual_server:
@@ -46,7 +44,6 @@
         all_profiles: "{{ item.all_profiles }}"
         pool: "{{ item.pool }}"
         snat: "{{ item.snat }}"
-      notify: save config
       loop: "{{ virtual_servers }}"
       register: vservercache
 
