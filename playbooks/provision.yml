@@ -55,5 +55,7 @@
         timeout: 5
       when: vservercache.changed
 
-  handlers:
-    - import_tasks: ../handlers/main.yml
+    - name: save config
+      bigip_config:
+        provider: "{{ f5_provider }}"
+        save: yes
