@@ -44,10 +44,8 @@
     - name: Delete F5 Nodes
       bigip_node:
         provider: "{{ f5_provider }}"
+        host: "{{ item.host }}"
         name: "{{ item.name }}"
-        lb_method: "{{ item.lb_method }}"
-        monitors: "{{ item.monitors }}"
-        monitor_type: "{{ item.monitor_type }}"
         state: absent
       loop: "{{ nodes }}"
 

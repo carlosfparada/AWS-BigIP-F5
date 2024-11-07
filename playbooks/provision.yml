@@ -13,6 +13,7 @@
         provider: "{{ f5_provider }}"
         host: "{{ item.host }}"
         name: "{{ item.name }}"
+        state: present
       loop: "{{ nodes }}"
 
     - name: Create F5 Pools
