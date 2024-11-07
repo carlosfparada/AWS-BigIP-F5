@@ -21,6 +21,15 @@
         state: absent
       loop: "{{ virtual_servers }}"
 
+    - name: Delete Pool Members
+      bigip_pool_member:
+        provider: "{{ f5_provider }}"
+        port: "{{ item.port }}"
+        host: "{{ item.host }}"
+        name: "{{ item.name }}"
+        pool: "{{ item.pool }}"
+        state: absent
+      loop: "{{ pool_members }}"
 
     - name: Delete F5 Pools
       bigip_pool: 
@@ -32,7 +41,7 @@
         state: absent
       loop: "{{ pools }}"
 
-    - name: Delete F5 Nodes (OPTIONAL)
+    - name: Delete F5 Nodes
       bigip_node:
         provider: "{{ f5_provider }}"
         name: "{{ item.name }}"
