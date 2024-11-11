@@ -136,7 +136,7 @@
   wait_for:
     port: 443
     state: started
-    timeout: 3600
+    timeout: 1800
     delay: 30
     host: "{{ ec2_bigipf5_instance.instances[0].public_ip_address }}"
 
