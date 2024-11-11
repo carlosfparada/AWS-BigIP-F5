@@ -94,6 +94,7 @@
     instance_type: "{{ ec2_bigipf5_flavor_name }}"
     name: "{{ ec2_bigipf5_instance_name }}"
     region: "{{ ec2_vpc_region }}"
+    security_group: "{{ ec2_sg_name }}"
     vpc_subnet_id: "{{ subnet.subnet.id }}"
     key_name: "{{ ec2_bigipf5_keypair_name }}"
     network:
