@@ -1,0 +1,23 @@
+---
+
+- name: BigIP F5 provisioning
+  hosts: localhost
+  connection: local
+  vars_files: vars/main.yml
+  gather_facts: no
+
+  tasks:
+  #  - include_vars: ../defaults/main.yml
+
+    - debug:
+        var: f5_provider
+
+    - name: gather facts
+      f5networks.f5_modules.bigip_device_info:
+        provider: "{{ f5_provider }}"
+        gather_subset: "{{ f5_device_info_subset }}"
+      register: _f5_facts
+
+    - name: Device Info output
+      debug: 
+        msg: "{{ _f5_facts }}"
