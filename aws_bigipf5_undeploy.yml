@@ -4,5 +4,5 @@
   gather_facts: no
   #vars_files: vars/main.yml
   roles:
-    - aws_bigipf5_deploy
+    - aws_bigipf5_undeploy
   
