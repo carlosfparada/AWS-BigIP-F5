@@ -1,5 +1,14 @@
 ---
 
+- name: Get nodes from Inventory and add to Groups
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files: vars/main.yml
+  tasks:
+  - include_role: 
+      name: utils_hosts_aws
+
 - name: BigIP F5 provisioning
   hosts: localhost
   connection: local
@@ -9,7 +18,17 @@
   tasks:
   #  - include_vars: ../defaults/main.yml
 
-    - debug:
+    - name: Set Provider Infoblox Data
+      set_fact:
+       f5_provider:
+          host: "{{ item.association.public_ip }}"
+          username: "{{ ec2_bigipf5_user }}"
+          password: "{{ ec2_bigipf5_pass }}"
+      loop: "{{ hostvars[groups['bigipf5'][0]].network_interfaces }}"
+      when: item.association is defined and item.association.public_ip is defined
+
+    - name: Debug Provider BigIP F5 Data (Public IP, Username, Password) 
+      debug:
         var: f5_provider
 
     - name: gather facts
