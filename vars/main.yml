@@ -33,6 +33,8 @@ ec2_bigipf5_flavor_name: t2.medium
 ec2_bigipf5_keypair_name: "KeyPair-Virginia"
 ec2_bigipf5_user: "{{ ansible_ssh_user }}"
 ec2_bigipf5_pass: "{{ ansible_ssh_pass }}"
+
+# Gather Facts
 f5_device_info_subset:
 #  - all
   - system-info
@@ -40,3 +42,44 @@ f5_device_info_subset:
   - ltm-pools
   - virtual-addresses
   - virtual-servers
+# CMDB
+nodes:
+  - name: "webserver-1"
+    host: "172.16.2.200"
+  - name: "webserver-2"
+    host: "172.16.2.199"
+  - name: "webserver-21"
+    host: "172.16.2.198"
+  - name: "webserver-22"
+    host: "172.16.2.197"
+pools:
+  - name: www_pool
+    lb_method: "round-robin"
+    monitors: "/Common/http"
+    monitor_type: "and_list"
+pool_members:
+  - name: "webserver-1"
+    host: "172.16.2.200"
+    port: 80
+    pool: www_pool
+  - name: "webserver-2"
+    host: "172.16.2.199"
+    port: 80
+    pool: www_pool
+  - name: "webserver-21"
+    host: "172.16.2.198"
+    port: 80
+    pool: www_pool
+  - name: "webserver-22"
+    host: "172.16.2.197"
+    port: 80
+    pool: www_pool
+virtual_servers:
+  - name: "vip"
+    port: "443"
+    enabled_vlans: "all"
+    all_profiles:
+      - 'http'
+      - 'clientssl'
+    pool: www_pool
+    snat: "Automap"
