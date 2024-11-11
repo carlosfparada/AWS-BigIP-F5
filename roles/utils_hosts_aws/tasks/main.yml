@@ -5,7 +5,7 @@
 
 - name: Get BigIP F5 node
   debug:
-    var: "{{ item }}"
+    var: item
   loop: "{{ groups['all'] }}"
   
 - name: Get BigIP F5 node
