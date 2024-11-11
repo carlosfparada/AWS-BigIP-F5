@@ -10,27 +10,38 @@
       Name: "{{ ec2_vpc_name }}"
   register: vpc
 
-- name: Create Subnet MGMT in VPC
+- name: Create Subnet default in VPC
   amazon.aws.ec2_vpc_subnet:
     vpc_id: "{{ vpc.vpc.id }}"
-    cidr: "{{ ec2_subnet_cidr_mgmt }}"
+    cidr: "{{ ec2_subnet_cidr }}"
     region: "{{ ec2_vpc_region }}"
     az: "{{ ec2_subnet_az }}"
     state: present
     tags:
-      Name: "{{ ec2_subnet_name_mgmt }}"
-  register: subnet_mgmt
+      Name: "{{ ec2_subnet_name }}"
+  register: subnet
 
-- name: Create Subnet SRV in VPC
+- name: Create Subnet 1 in VPC
   amazon.aws.ec2_vpc_subnet:
     vpc_id: "{{ vpc.vpc.id }}"
-    cidr: "{{ ec2_subnet_cidr_srv }}"
+    cidr: "{{ ec2_subnet_cidr1 }}"
     region: "{{ ec2_vpc_region }}"
     az: "{{ ec2_subnet_az }}"
     state: present
     tags:
-      Name: "{{ ec2_subnet_name_srv }}"
-  register: subnet_srv
+      Name: "{{ ec2_subnet_name1 }}"
+  register: subnet1
+
+- name: Create Subnet 2 in VPC
+  amazon.aws.ec2_vpc_subnet:
+    vpc_id: "{{ vpc.vpc.id }}"
+    cidr: "{{ ec2_subnet_cidr2 }}"
+    region: "{{ ec2_vpc_region }}"
+    az: "{{ ec2_subnet_az }}"
+    state: present
+    tags:
+      Name: "{{ ec2_subnet_name2 }}"
+  register: subnet2
 
 - name: Create Internet Gateway (IGW)
   amazon.aws.ec2_vpc_igw:
@@ -49,8 +60,7 @@
     tags:
       Name: "{{ ec2_rt_name }}"
     subnets:
-      - "{{ subnet_mgmt.subnet.id }}"
-      - "{{ subnet_srv.subnet.id }}"
+      - "{{ subnet.subnet.id }}"
     routes:
       - dest: 0.0.0.0/0
         gateway_id: "{{ igw.gateway_id }}"
@@ -78,32 +88,6 @@
     region: "{{ ec2_vpc_region }}"
   register: ami_bigipf5_find
 
-- name: Create ENI MGMT
-  amazon.aws.ec2_eni:
-    name: "{{ ec2_eni_name_mgmt }}"
-    region: "{{ ec2_vpc_region }}"
-    subnet_id: "{{ subnet_mgmt.subnet.id }}"
-    security_groups: "{{ ec2_sg_name }}"
-    delete_on_termination: true
-    attached: false
-    tags:
-      Name: "{{ ec2_eni_name_mgmt }}"
-    state: present
-  register: eni_mgmt
-
-- name: Create ENI SRV
-  amazon.aws.ec2_eni:
-    name: "{{ ec2_eni_name_srv }}"
-    region: "{{ ec2_vpc_region }}"
-    subnet_id: "{{ subnet_srv.subnet.id }}"
-    security_groups: "{{ ec2_sg_name }}"
-    delete_on_termination: true
-    attached: false
-    tags:
-      Name: "{{ ec2_eni_name_srv }}"
-    state: present
-  register: eni_srv
-
 - name: Create BigIP F5 instance
   amazon.aws.ec2_instance:
     image_id: "{{ ami_bigipf5_find.images[-1].image_id | default('') }}"
@@ -112,38 +96,48 @@
     region: "{{ ec2_vpc_region }}"
     vpc_subnet_id: "{{ subnet_srv.subnet.id }}"
     key_name: "{{ ec2_bigipf5_keypair_name }}"
-    network_interfaces_ids:
-      - id: "{{ eni_mgmt.interface.id }}"
-        device_index: 0
-      - id: "{{ eni_srv.interface.id }}"
-        device_index: 1
+    network:
+      assign_public_ip: true
     user_data: "{{ lookup('ansible.builtin.template', 'user_data.j2') }}"
-    volumes: "{{ volumes }}"
     tags:
       Name: "{{ ec2_bigipf5_instance_name }}"
     state: running
   register: ec2_bigipf5_instance
 
-- name: Allocate an Elastic IP to ENI SRV
-  amazon.aws.ec2_eip:
+- name: Create and Attach ENI 1
+  amazon.aws.ec2_eni:
+    name: "{{ ec2_eni_name1 }}"
     region: "{{ ec2_vpc_region }}"
-    device_id: "{{ eni_srv.interface.id }}"
-    in_vpc: true
+    instance_id: "{{ ec2_bigipf5_instance.instances[0].instance_id }}"
+    device_index: 1
+    subnet_id: "{{ subnet1.subnet.id }}"
+    delete_on_termination: true
+    attached: true
     state: present
-  register: eip_srv
 
-- name: Print BigIP F5 instance details
+- name: Create and Attach ENI 2
+  amazon.aws.ec2_eni:
+    name: "{{ ec2_eni_name2 }}"
+    region: "{{ ec2_vpc_region }}"
+    instance_id: "{{ ec2_bigipf5_instance.instances[0].instance_id }}"
+    device_index: 2
+    subnet_id: "{{ subnet2.subnet.id }}"
+    delete_on_termination: true
+    attached: true
+    state: present
+
+- name: Print FortiGate instance details
   ansible.builtin.debug:
-    msg: "Instance UI console: https://{{ eip_srv.public_ip }}"
+    msg: "Instance DNS name is: {{ ec2_bigipf5_instance.instances[0].public_dns_name }} with IP address {{ ec2_bigipf5_instance.instances[0].public_ip_address }}"
 
 # Wait for boot ups
 - name: Wait until BigIP F5 boots up
   wait_for:
-    port: 443
+    port: 8443
     state: started
     timeout: 3600
     delay: 30
-    host: "{{ eip_srv.public_ip }}"
+    host: "{{ ec2_bigipf5_instance.instances[0].public_ip_address }}"
 
 - name: Sleep for 60 seconds and continue
   wait_for:

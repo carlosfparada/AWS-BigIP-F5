@@ -4,15 +4,15 @@ ec2_vpc_region: us-east-1
 ec2_vpc_cidr: 10.0.0.0/16
 # Subnets
 ec2_subnet_az: us-east-1a
-ec2_subnet_name_mgmt: Subnet_F5_MGMT
-ec2_subnet_cidr_mgmt: 10.0.0.0/24
-ec2_subnet_name_srv: Subnet_F5_SRV
-ec2_subnet_cidr_srv: 10.0.1.0/24
+ec2_subnet_name: Subnet-F5
+ec2_subnet_cidr: 10.0.0.0/24
+ec2_subnet_name1: Subnet-F5-ENI1
+ec2_subnet_cidr1: 10.0.1.0/24
+ec2_subnet_name2: SubnetF5-ENI2
+ec2_subnet_cidr2: 10.0.2.0/24
 # ENIs
-ec2_eni_name_srv: ENI_F5_SRV
-ec2_eni_name_mgmt: ENI_F5_MGMT
-# Elastic IP
-ec2_eip_name_mgmt: EIP_F5_MGMT
+ec2_eni_name1: ENI_F5_1
+ec2_eni_name2: ENI_F5_2
 # IGW
 ec2_igw_name: IGW_F5
 # Route Table

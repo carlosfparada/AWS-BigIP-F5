@@ -1,5 +1,5 @@
 #cloud-config
 chpasswd:
   list: |
-    {{ ec2_infoblox_pass }}:{{ ec2_infoblox_pass }}
+    {{ ec2_bigipf5_user }}:{{ ec2_bigipf5_pass }}
   expire: False
