@@ -18,9 +18,12 @@
     - name: Set Provider Infoblox Data
       set_fact:
         f5_provider:
-            host: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
-            username: "{{ ec2_bigipf5_user }}"
+            server: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
+            server_port: 443
+            user: "{{ ec2_bigipf5_user }}"
             password: "{{ ec2_bigipf5_pass }}"
+            validate_certs: no
+            no_f5_teem: false
 
     - name: Debug Provider BigIP F5 Data (Public IP, Username, Password) 
       debug:
