@@ -49,7 +49,7 @@
       "tag:Name": "{{ ec2_rt_name }}"
   register: rtb
 
-- name: Terminate FortiGate instance
+- name: Terminate BigIP F5 instance
   amazon.aws.ec2_instance:
     state: absent
     region: "{{ ec2_vpc_region }}"
