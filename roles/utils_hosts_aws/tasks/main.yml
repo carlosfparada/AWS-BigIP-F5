@@ -2,13 +2,14 @@
 
 # - name: Refresh inventory
 #   ansible.builtin.meta: refresh_inventory
+- debug:
+    var: 
 
 - name: Get BigIP F5 node
   set_fact:
     node_name: "{{ item }}"
   loop: "{{ groups['all'] }}"
-  when: hostvars[item].tags.Name | regex_search("^bigipf5-(.*)$")
-  ignore_errors: true
+  when: hostvars[item].tags is defined and hostvars[item].tags.Name | regex_search("^bigipf5-(.*)$")
 
 - name: Add BigIP F5 node to the bigipf5 group
   add_host:
