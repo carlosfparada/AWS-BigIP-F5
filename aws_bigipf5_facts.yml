@@ -22,7 +22,7 @@
         var: hostvars[groups['bigipf5'][0]]
 
     - debug:
-        var: hostvars[groups['bigipf5']
+        var: hostvars[groups['bigipf5']]
 
     - name: Set Provider Infoblox Data
       set_fact:
