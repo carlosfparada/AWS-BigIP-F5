@@ -1,5 +1,14 @@
 ---
 
+- name: Get nodes from Inventory and add to Groups
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files: vars/main.yml
+  tasks:
+  - include_role: 
+      name: utils_hosts_aws
+
 - name: BigIP F5 provisioning
   hosts: localhost
   connection: local
