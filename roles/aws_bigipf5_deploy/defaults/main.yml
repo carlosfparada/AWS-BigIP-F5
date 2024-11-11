@@ -23,26 +23,24 @@ ec2_sg_openports:
   - 80
   - 443
   - 22
-  - 514
-  - 541
-  - 542
-  - 9433
+  - 8433
 
 # BigIP F5
 ec2_bigipf5_instance_name: bigipf5-1
-ec2_bigipf5_image_id: ami-0622a3d7a285429de
-ec2_bigipf5_image_name: bigipf5 NIOS 9.0.5(BYOL)-3d6f2259-6756-484c-ac5e-f2d9330afe95
-ec2_bigipf5_flavor_name: m5.large #m6i.2xlarge 
+ec2_bigipf5_image_id: ami-07b95e48f28d08f54
+ec2_bigipf5_image_name: "F5 BIGIP-17.1.1.4-0.100.9 PAYG-Good 25Mbps-241016111301-8e1217d4-a046-4cdf-894e-e38175bae37f"
+ec2_bigipf5_flavor_name: t2.medium
 ec2_bigipf5_keypair_name: "KeyPair-Virginia"
-ec2_bigipf5_admin_pass: "{{ ansible_ssh_pass }}"
-volumes:
-  - device_name: /dev/sda1
-    ebs:
-      volume_type: gp3
-      volume_size: 500
-      delete_on_termination: true
-  - device_name: /dev/sdb
-    ebs:
-      volume_type: gp3
-      volume_size: 500
-      delete_on_termination: true
+ec2_bigipf5_user: "{{ ansible_ssh_user }}"
+ec2_bigipf5_pass: "{{ ansible_ssh_pass }}"
+# volumes:
+#   - device_name: /dev/sda1
+#     ebs:
+#       volume_type: gp3
+#       volume_size: 500
+#       delete_on_termination: true
+#   - device_name: /dev/sdb
+#     ebs:
+#       volume_type: gp3
+#       volume_size: 500
+#       delete_on_termination: true

@@ -1,4 +1,5 @@
-#infoblox-config
-remote_console_enabled: y
-default_admin_password: {{ ec2_infoblox_admin_pass }}
-temp_license: enterprise dns dhcp cloud nios IB-V825
+#cloud-config
+chpasswd:
+  list: |
+    {{ ec2_infoblox_pass }}:{{ ec2_infoblox_pass }}
+  expire: False
