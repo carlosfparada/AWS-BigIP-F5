@@ -146,5 +146,5 @@
 
 - name: Print BigIP F5 instance details
   ansible.builtin.debug:
-    msg: "Instance ready at https://: {{ ec2_bigipf5_instance.instances[0].public_ip_address }}:8443/"
+    msg: "Instance console ready at https://: {{ ec2_bigipf5_instance.instances[0].public_ip_address }}:8443/"
 
