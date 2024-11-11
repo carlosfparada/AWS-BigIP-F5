@@ -134,7 +134,7 @@
 # Wait for boot ups
 - name: Wait until BigIP F5 boots up
   wait_for:
-    port: 8443
+    port: 443
     state: started
     timeout: 3600
     delay: 30
