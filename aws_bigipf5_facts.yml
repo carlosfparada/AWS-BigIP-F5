@@ -18,14 +18,15 @@
   tasks:
   #  - include_vars: ../defaults/main.yml
 
+    - debug:
+        var: hostvars[groups['bigipf5'][0]].network_interfaces
+        
     - name: Set Provider Infoblox Data
       set_fact:
        f5_provider:
-          host: "{{ item.association.public_ip }}"
+          host: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
           username: "{{ ec2_bigipf5_user }}"
           password: "{{ ec2_bigipf5_pass }}"
-      loop: "{{ hostvars[groups['bigipf5'][0]].network_interfaces }}"
-      when: item.association is defined and item.association.public_ip is defined
 
     - name: Debug Provider BigIP F5 Data (Public IP, Username, Password) 
       debug:
