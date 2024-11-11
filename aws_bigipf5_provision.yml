@@ -6,7 +6,19 @@
   vars_files: vars/main.yml
   gather_facts: no  
   tasks:
-  #  - include_vars: ../defaults/main.yml
+    - name: Set Provider Infoblox Data
+      set_fact:
+        f5_provider:
+            server: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
+            server_port: 443
+            user: "{{ ec2_bigipf5_user }}"
+            password: "{{ ec2_bigipf5_pass }}"
+            validate_certs: no
+            no_f5_teem: false
+
+    - name: Debug Provider BigIP F5 Data (Public IP, Username, Password) 
+      debug:
+        var: f5_provider
 
     - name: Create F5 Nodes
       bigip_node:
