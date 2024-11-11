@@ -33,3 +33,10 @@ ec2_bigipf5_flavor_name: t2.medium
 ec2_bigipf5_keypair_name: "KeyPair-Virginia"
 ec2_bigipf5_user: "{{ ansible_ssh_user }}"
 ec2_bigipf5_pass: "{{ ansible_ssh_pass }}"
+f5_device_info_subset:
+#  - all
+  - system-info
+  - nodes
+  - ltm-pools
+  - virtual-addresses
+  - virtual-servers
