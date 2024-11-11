@@ -2,11 +2,6 @@
 
 # - name: Refresh inventory
 #   ansible.builtin.meta: refresh_inventory
-
-- name: Get BigIP F5 node
-  debug:
-    var: item
-  loop: "{{ groups['all'] }}"
   
 - name: Get BigIP F5 node
   set_fact:
@@ -19,6 +14,3 @@
     name: "{{ node_name }}"
     groups: "{{ group_name }}"
   when: node_name is defined
-
-- debug:
-    var: node_name
