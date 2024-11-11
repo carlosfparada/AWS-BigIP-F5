@@ -94,7 +94,7 @@
     instance_type: "{{ ec2_bigipf5_flavor_name }}"
     name: "{{ ec2_bigipf5_instance_name }}"
     region: "{{ ec2_vpc_region }}"
-    vpc_subnet_id: "{{ subnet_srv.subnet.id }}"
+    vpc_subnet_id: "{{ subnet.subnet.id }}"
     key_name: "{{ ec2_bigipf5_keypair_name }}"
     network:
       assign_public_ip: true
