@@ -16,7 +16,6 @@
   gather_facts: no
 
   tasks:
-  #  - include_vars: ../defaults/main.yml
 
     - debug:
         var: hostvars[groups['bigipf5'][0]]
