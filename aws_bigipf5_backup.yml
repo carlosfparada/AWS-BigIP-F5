@@ -15,8 +15,9 @@
   vars_files: vars/main.yml
   gather_facts: no
   tasks:
-  #  - include_vars: ../defaults/main.yml
-
+    - debug:
+        var: ansible_facts
+        
     - name: Set Provider BigIP F5 Data
       set_fact:
         f5_provider:
