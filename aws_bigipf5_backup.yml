@@ -25,9 +25,6 @@
             validate_certs: no
             no_f5_teem: false
 
-    - debug: 
-        var: f5_provider 
-
     - name: Create backup UCS (User Configuration Set)
       f5networks.f5_modules.bigip_ucs_fetch:
         provider: "{{ f5_provider }}"
@@ -41,9 +38,10 @@
         var: backupinfo
 
 - name: Store files via scp
-  hosts: "{{ groups['bigipf5'][0] }}"
+  hosts: "{{ groups['rhel'][0] }}"
   connection: ssh
   vars_files: vars/main.yml
+  gather_facts: no
   tasks:
   #  - include_vars: ../defaults/main.yml
 
