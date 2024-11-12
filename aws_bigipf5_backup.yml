@@ -33,9 +33,9 @@
         dest: /tmp/backup.ucs
       register: backupinfo
 
-    - name: Debug backup content
-      debug:
-        var: backupinfo
+    # - name: Debug backup content
+    #   debug:
+    #     var: backupinfo
 
 - name: Store files via scp
   hosts: "{{ groups['backupserver'][0] }}"
