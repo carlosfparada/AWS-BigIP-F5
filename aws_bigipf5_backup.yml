@@ -43,6 +43,8 @@
   vars_files: vars/main.yml
   gather_facts: no
   tasks:
+    - debug:
+        var: groups['rhel'][0]
     - name: Create backup folder on backup server
       ansible.builtin.file:
         path: "{{ ec2_rhel_backup_folder }}"
