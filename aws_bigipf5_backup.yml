@@ -8,6 +8,9 @@
   tasks:
   #  - include_vars: ../defaults/main.yml
 
+    - debug: 
+        var: 
+
     - name: Create backup UCS (User Configuration Set)
       f5networks.f5_modules.bigip_ucs_fetch:
         provider: "{{ f5_provider }}"
