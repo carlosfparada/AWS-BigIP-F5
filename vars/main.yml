@@ -45,6 +45,7 @@ ec2_rhel_disk_size: 20
 ec2_rhel_ebs_name: /dev/sda1
 ec2_rhel_keypair_name: "KeyPair-Virginia"
 #ec2_rhel_pass: "{{ ansible_ssh_pass }}"
+ec2_rhel_backup_folder: /tmp/backup
 
 # Gather Facts
 f5_device_info_subset:

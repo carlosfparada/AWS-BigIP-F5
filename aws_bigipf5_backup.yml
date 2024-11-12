@@ -43,8 +43,6 @@
   vars_files: vars/main.yml
   gather_facts: no
   tasks:
-  #  - include_vars: ../defaults/main.yml
-
     - name: Create backup folder on backup server
       ansible.builtin.file:
         path: "{{ backup_server_folder }}"
