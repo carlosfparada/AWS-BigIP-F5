@@ -1,5 +1,14 @@
 ---
 
+- name: Get nodes from Inventory and add to Groups
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files: vars/main.yml
+  tasks:
+  - include_role: 
+      name: utils_hosts_aws
+
 - name: BigIP F5 UCS backup
   hosts: localhost
   connection: local
@@ -8,8 +17,18 @@
   tasks:
   #  - include_vars: ../defaults/main.yml
 
+    - name: Set Provider BigIP F5 Data
+      set_fact:
+        f5_provider:
+            server: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
+            server_port: 443
+            user: "{{ ec2_bigipf5_user }}"
+            password: "{{ ec2_bigipf5_pass }}"
+            validate_certs: no
+            no_f5_teem: false
+
     - debug: 
-        var: 
+        var: f5_provider 
 
     - name: Create backup UCS (User Configuration Set)
       f5networks.f5_modules.bigip_ucs_fetch:

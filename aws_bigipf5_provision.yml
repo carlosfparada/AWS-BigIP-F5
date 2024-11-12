@@ -15,7 +15,7 @@
   vars_files: vars/main.yml
   gather_facts: no  
   tasks:
-    - name: Set Provider Infoblox Data
+    - name: Set Provider BigIP F5 Data
       set_fact:
         f5_provider:
             server: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"

@@ -12,5 +12,11 @@
 - name: Add BigIP F5 node to the bigipf5 group
   add_host:
     name: "{{ node_name }}"
-    groups: "{{ group_name }}"
+    groups: "bigipf5"
+  when: node_name is defined
+
+- name: Add RHEL node to the rhel group
+  add_host:
+    name: "{{ node_name }}"
+    groups: "rhel"
   when: node_name is defined
