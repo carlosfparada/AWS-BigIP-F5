@@ -19,7 +19,7 @@
   set_fact:
     node_name: "{{ item }}"
   loop: "{{ groups['all'] }}"
-  when: hostvars[item].tags is defined and hostvars[item].tags.Name | regex_search("^backup-server-(.*)$")
+  when: hostvars[item].tags is defined and hostvars[item].tags.Name | regex_search("^rhel-(.*)$")
 
 - name: Add RHEL node to the rhel group
   add_host:
