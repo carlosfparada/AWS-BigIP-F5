@@ -41,7 +41,7 @@
   hosts: "{{ groups['rhel'][0] }}"
   connection: ssh
   vars_files: vars/main.yml
-  gather_facts: no
+  gather_facts: yes
   tasks:
     - name: Create backup folder on backup server
       ansible.builtin.file:
@@ -52,8 +52,8 @@
     - name: Copy config to backup server
       copy:
         src: "/tmp/backup.ucs"
-        #dest: "{{ ec2_rhel_backup_folder }}f5-{{ '%Y-%m-%dT%H:%M:%S' | strftime(ansible_date_time.epoch) }}"
-        dest: "{{ ec2_rhel_backup_folder }}/f5-{{ '%Y-%m-%dT%H:%M:%S' | strftime | to_datetime }}"
+        dest: "{{ ec2_rhel_backup_folder }}f5-{{ '%Y-%m-%dT%H:%M:%S' | strftime(ansible_date_time.epoch) }}"
+        #dest: "{{ ec2_rhel_backup_folder }}/f5-{{ '%Y-%m-%dT%H:%M:%S' | strftime | to_datetime }}"
      #become: true
 
 
