@@ -1,12 +1,29 @@
 ---
 
-- name: BigIP F5 provisioning
+- name: Get nodes from Inventory and add to Groups
   hosts: localhost
   connection: local
   gather_facts: no
-  
+  vars_files: vars/main.yml
   tasks:
-    - include_vars: ../defaults/main.yml
+  - include_role: 
+      name: utils_hosts_aws
+
+- name: BigIP F5 provisioning
+  hosts: localhost
+  connection: local
+  vars_files: vars/main.yml
+  gather_facts: no  
+  tasks:
+    - name: Set Provider BigIP F5 Data
+      set_fact:
+        f5_provider:
+            server: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
+            server_port: 443
+            user: "{{ ec2_bigipf5_user }}"
+            password: "{{ ec2_bigipf5_pass }}"
+            validate_certs: no
+            no_f5_teem: false
 
     - name: Delete Virtual Server
       bigip_virtual_server:
