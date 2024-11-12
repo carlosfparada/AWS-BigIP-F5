@@ -25,10 +25,6 @@
             validate_certs: no
             no_f5_teem: false
 
-    - name: Debug Provider BigIP F5 Data (Public IP, Username, Password) 
-      debug:
-        var: f5_provider
-
     - name: gather facts
       f5networks.f5_modules.bigip_device_info:
         provider: "{{ f5_provider }}"
