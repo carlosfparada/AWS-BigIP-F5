@@ -15,6 +15,12 @@
     groups: "bigipf5"
   when: node_name is defined
 
+- name: Get BigIP F5 node
+  set_fact:
+    node_name: "{{ item }}"
+  loop: "{{ groups['all'] }}"
+  when: hostvars[item].tags is defined and hostvars[item].tags.Name | regex_search("^rhel-(.*)$")
+
 - name: Add RHEL node to the rhel group
   add_host:
     name: "{{ node_name }}"

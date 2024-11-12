@@ -49,12 +49,12 @@
       ansible.builtin.file:
         path: "{{ ec2_rhel_backup_folder }}"
         state: directory
-#      become: true
+     #become: true
 
     - name: Copy config to backup server
       copy:
         src: "/tmp/backup.ucs"
         dest: "{{ ec2_rhel_backup_folder }}f5-{{ '%Y-%m-%dT%H:%M:%S' | strftime(ansible_date_time.epoch) }}"
-#      become: true
+     #become: true
 
 
