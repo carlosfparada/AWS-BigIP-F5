@@ -18,7 +18,7 @@
 
   - name: Find latest backup filename
     ansible.builtin.find:
-      paths: "{{ backup_server_folder }}"
+      paths: "{{ ec2_rhel_backup_folder }}"
       file_type: file
       patterns: 'f5*'
       # hidden: true
