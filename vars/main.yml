@@ -33,8 +33,8 @@ ec2_bigipf5_flavor_name: t2.medium
 ec2_bigipf5_keypair_name: "KeyPair-Virginia"
 # ec2_bigipf5_user: "{{ ansible_ssh_user }}"
 # ec2_bigipf5_pass: "{{ ansible_ssh_pass }}"
-ec2_bigipf5_user: "{{ lookup("env", "ANSIBLE_NET_USERNAME") }}"
-ec2_bigipf5_pass: "{{ lookup("env", "ANSIBLE_NET_PASSWORD") }}"
+ec2_bigipf5_user: '{{ lookup("env", "ANSIBLE_NET_USERNAME") }}'
+ec2_bigipf5_pass: '{{ lookup("env", "ANSIBLE_NET_PASSWORD") }}''
 
 # RHEL instance
 ec2_rhel_instance_name: rhel-1
