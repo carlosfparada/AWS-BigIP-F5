@@ -10,7 +10,7 @@
       name: utils_hosts_aws
       
 - name: Find F5 UCS backup Files
-  hosts: "{{ groups['rhel'][0] }}"
+  hosts: "{{ groups['backupserver'][0] }}"
   connection: ssh
   vars_files: vars/main.yml
   gather_facts: no
