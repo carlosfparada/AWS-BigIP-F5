@@ -35,17 +35,13 @@ ec2_bigipf5_user: "{{ ansible_ssh_user }}"
 ec2_bigipf5_pass: "{{ ansible_ssh_pass }}"
 
 # RHEL instance
-ec2_instance_name: rhel-1
-ec2_image_name: RHEL-8.6.0_HVM-*x86_64*
-ec2_flavor_name: t2.micro
-ec2_disk_size: 20
-ec2_ebs_name: /dev/sda1
-ec2_key_name: "KeyPair"
-
-#cloud-config
-user: root
-password: admin123$%&
-
+ec2_rhel_instance_name: rhel-1
+#ec2_rhel_image_id: 
+ec2_rhel_image_name: RHEL-8.6.0_HVM-*x86_64*
+ec2_rhel_flavor_name: t2.micro
+ec2_rhel_disk_size: 20
+ec2_rhel_ebs_name: /dev/sda1
+ec2_rhel_keypair_name: "KeyPair"
 
 # Gather Facts
 f5_device_info_subset:
