@@ -80,7 +80,7 @@
     tags:
       Name: "{{ ec2_sg_name }}"
 
-- name: Get AMI by Name
+- name: Get BigIP F5 AMI by Name
   amazon.aws.ec2_ami_info:
     filters:
       #image-id: "{{ ec2_bigipf5_image_id }}"
@@ -99,7 +99,7 @@
     key_name: "{{ ec2_bigipf5_keypair_name }}"
     network_interfaces:
       assign_public_ip: true
-    user_data: "{{ lookup('ansible.builtin.template', 'user_data.j2') }}"
+    user_data: "{{ lookup('ansible.builtin.template', 'user_data_bigipf5.j2') }}"
     tags:
       Name: "{{ ec2_bigipf5_instance_name }}"
     state: running
@@ -127,9 +127,38 @@
     attached: true
     state: present
 
-- name: Print BIGIP F5 instance details
+- name: Print BigIP F5 instance details
   ansible.builtin.debug:
     msg: "Instance DNS name is: {{ ec2_bigipf5_instance.instances[0].public_dns_name }} with IP address {{ ec2_bigipf5_instance.instances[0].public_ip_address }}"
+
+- name: Get RHEL AMI by Name
+  amazon.aws.ec2_ami_info:
+    filters:
+      #image-id: "{{ ec2_rhel_image_id }}"
+      name: "{{ ec2_rhel_image_name }}"
+    region: "{{ ec2_vpc_region }}"
+  register: ami_bigipf5_find
+
+- name: Create RHEL instance
+  amazon.aws.ec2_instance:
+    image_id: "{{ ami_bigipf5_find.images[-1].image_id | default('') }}"
+    instance_type: "{{ ec2_rhel_flavor_name }}"
+    name: "{{ ec2_rhel_instance_name }}"
+    region: "{{ ec2_vpc_region }}"
+    security_group: "{{ ec2_sg_name }}"
+    vpc_subnet_id: "{{ subnet.subnet.id }}"
+    key_name: "{{ ec2_rhel_keypair_name }}"
+    network_interfaces:
+      assign_public_ip: true
+    user_data: "{{ lookup('ansible.builtin.template', 'user_data_rhel.j2') }}"
+    tags:
+      Name: "{{ ec2_rhel_instance_name }}"
+    state: running
+  register: ec2_rhel_instance
+
+- name: Print RHEL instance details
+  ansible.builtin.debug:
+    msg: "Instance DNS name is: {{ ec2_rhel_instance.instances[0].public_dns_name }} with IP address {{ ec2_rhel_instance.instances[0].public_ip_address }}"
 
 # Wait for boot ups
 - name: Wait until BigIP F5 boots up
@@ -140,11 +169,23 @@
     delay: 30
     host: "{{ ec2_bigipf5_instance.instances[0].public_ip_address }}"
 
+# Wait for boot ups
+- name: Wait until RHEL boots up
+  wait_for:
+    port: 22
+    state: started
+    timeout: 1800
+    delay: 30
+    host: "{{ ec2_rhel_instance.instances[0].public_ip_address }}"
+
 - name: Sleep for 60 seconds and continue
   wait_for:
     timeout: 60
 
 - name: Print BigIP F5 instance details
   ansible.builtin.debug:
-    msg: "Instance console ready at https://: {{ ec2_bigipf5_instance.instances[0].public_ip_address }}:8443/"
+    msg: "GigIP F5 Instance console ready at https://: {{ ec2_bigipf5_instance.instances[0].public_ip_address }}"
 
+- name: Print RHEL instance details
+  ansible.builtin.debug:
+    msg: "RHEL Instance ssh ready at ssh root@{{ ec2_rhel_instance.instances[0].public_ip_address }}"

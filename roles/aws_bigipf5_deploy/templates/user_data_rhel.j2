@@ -1,0 +1,5 @@
+#cloud-config
+chpasswd:
+  list: |
+    {{ ec2_bigipf5_user }}:{{ ec2_bigipf5_pass }}
+  expire: False
