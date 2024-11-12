@@ -1,11 +1,20 @@
 ---
 
-- name: Find F5 UCS backup Files
-  hosts: backup-server
-  #connection: ssh
+- name: Get nodes from Inventory and add to Groups
+  hosts: localhost
+  connection: local
+  gather_facts: no
   vars_files: vars/main.yml
   tasks:
-  #   - include_vars: ../defaults/main.yml
+  - include_role: 
+      name: utils_hosts_aws
+      
+- name: Find F5 UCS backup Files
+  hosts: "{{ groups['rhel'][0] }}"
+  connection: ssh
+  vars_files: vars/main.yml
+  gather_facts: no
+  tasks:
 
   - name: Find latest backup filename
     ansible.builtin.find:
@@ -33,10 +42,18 @@
 - name: BigIP F5 restore from UCS
   hosts: localhost
   connection: local
+  vars_files: vars/main.yml
   gather_facts: no
-
   tasks:
-    - include_vars: ../defaults/main.yml
+    - name: Set Provider BigIP F5 Data
+      set_fact:
+        f5_provider:
+            server: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
+            server_port: 443
+            user: "{{ ec2_bigipf5_user }}"
+            password: "{{ ec2_bigipf5_pass }}"
+            validate_certs: no
+            no_f5_teem: false
 
     # - name: Downloads (upload) UCS (User Configuration Set)
     #   f5networks.f5_modules.bigip_ucs:

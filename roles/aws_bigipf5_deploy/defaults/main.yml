@@ -37,6 +37,7 @@ ec2_bigipf5_user: '{{ lookup("env", "ANSIBLE_NET_USERNAME") }}'
 ec2_bigipf5_pass: '{{ lookup("env", "ANSIBLE_NET_PASSWORD") }}'
 
 # RHEL instance
+#ec2_rhel_instance_name: backup-server-1
 ec2_rhel_instance_name: rhel-1
 #ec2_rhel_image_id: 
 ec2_rhel_image_name: RHEL-8.6.0_HVM-*x86_64*
