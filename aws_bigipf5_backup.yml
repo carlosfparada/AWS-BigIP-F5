@@ -16,7 +16,7 @@
   gather_facts: no
   tasks:
     - debug:
-        var: ansible_facts
+        var: hostvars[groups['bigipf5'][0]]
 
     - name: Set Provider BigIP F5 Data
       set_fact:
