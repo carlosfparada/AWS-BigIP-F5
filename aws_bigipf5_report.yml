@@ -63,7 +63,11 @@
 
     - name: a
       debug:
-        var: hostvars[localhost]
+        var: hostvars['localhost']
+
+    - name: a
+      debug:
+        var: hostvars['localhost']._pools
 
     - name: a
       debug:
