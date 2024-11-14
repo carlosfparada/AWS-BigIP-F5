@@ -22,7 +22,7 @@
         </tr>
     </thead>
  <tbody>
-  {% for pool in _pools.ansible_facts.ansible_net_ltm_pools %}
+  {% for pool in hostvars['localhost']._pools.ansible_facts.ansible_net_ltm_pools %}
   <tr>
   {% if pool.availability_status == 'available' %}
   <td><img src="green.png" alt="{{ pool.availability_status }}" style="width:14px;height:14px;"></td>
