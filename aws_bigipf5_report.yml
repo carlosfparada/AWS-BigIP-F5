@@ -84,7 +84,7 @@
 
     - name: Copy static files
       copy:
-        src: "../files/{{ item }}"
+        src: "files/{{ item }}"
         dest: "{{ f5_report_folder }}/{{item}}"
       loop:
         - main.css
@@ -94,13 +94,13 @@
 
     - name: Generate pool report
       template: 
-        src: "../templates/poolindex.j2"
+        src: "templates/poolindex.j2"
         dest: "{{ f5_report_folder }}/poolindex.html"
       become: true
 
     - name: Generate pool member report 
       template: 
-        src: "../templates/memberlist.j2"
+        src: "templates/memberlist.j2"
         dest: "{{ f5_report_folder }}/{{ item.name }}_members.html"
       loop: "{{ hostvars['localhost']._pools.ansible_facts.ansible_net_ltm_pools }}"
       # loop_control:
