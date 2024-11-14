@@ -15,8 +15,6 @@
   vars_files: vars/main.yml
   gather_facts: no  
   tasks:
-    - debug:
-        var: hostvars[groups['bigipf5'][0]]
     - name: Set Provider BigIP F5 Data
       set_fact:
         f5_provider:
