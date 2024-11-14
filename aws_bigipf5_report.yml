@@ -63,7 +63,11 @@
 
     - name: a
       debug:
-        var: hostvars[groups['bigipf5'][0]]
+        var: hostvars[localhost]
+
+    - name: a
+      debug:
+        var: hostvars[groups['bigipf5'][0]]._pools
 
     - name: Clean old member reports
       file: 
