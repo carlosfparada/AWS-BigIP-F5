@@ -1,35 +1,68 @@
 ---
 
-- name: BigIP F5 read
+- name: Get nodes from Inventory and add to Groups
   hosts: localhost
   connection: local
   gather_facts: no
-
+  vars_files: vars/main.yml
   tasks:
-    - include_vars: ../defaults/main.yml
+  - include_role: 
+      name: utils_hosts_aws
+
+- name: BigIP F5 provisioning
+  hosts: localhost
+  connection: local
+  vars_files: vars/main.yml
+  gather_facts: no  
+  tasks:
+    - name: Set Provider BigIP F5 Data
+      set_fact:
+        f5_provider:
+            server: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
+            server_port: 443
+            user: "{{ ec2_bigipf5_user }}"
+            password: "{{ ec2_bigipf5_pass }}"
+            validate_certs: no
+            no_f5_teem: false
+
+- name: BigIP F5 read data
+  hosts: localhost
+  connection: local
+  vars_files: vars/main.yml
+  gather_facts: no
+  tasks:
+    - name: Set Provider BigIP F5 Data
+      set_fact:
+        f5_provider:
+            server: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
+            server_port: 443
+            user: "{{ ec2_bigipf5_user }}"
+            password: "{{ ec2_bigipf5_pass }}"
+            validate_certs: no
+            no_f5_teem: false
 
     - name: Collect F5 data (ltm-pools)
       f5networks.f5_modules.bigip_device_info:
         provider: "{{ f5_provider }}"
         gather_subset:
           - ltm-pools
-      connection: local
       register: _pools
-      tags: [always]
 
     - name: Debug facts
       debug:
         var: _pools
-      connection: local
-      tags: [always]
-      
+
+- name: Generate report files
+  hosts: "{{ groups['rhelserver'][0] }}"
+  connection: ssh
+  vars_files: vars/main.yml
+  gather_facts: yes
+  tasks:
     - name: Ensure data folder exists
       file: 
         path: "{{ report_folder }}"
         state: directory
       become: true
-      tags: [always]
-      delegate_to: "{{ report_webserver }}"
 
     - name: Clean old reports and files
       file: 
@@ -41,19 +74,15 @@
         - "{{ report_folder }}red.png"
         - "{{ report_folder }}green.png"
       become: true
-      delegate_to: "{{ report_webserver }}"
-      tags: [always]
 
     - name: Clean old member reports
       file: 
         path: "{{ report_folder }}{{ item.name }}_members.html"
         state: absent
       loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
-      loop_control:
-        label: "{{ item.name }}"
+      # loop_control:
+      #   label: "{{ item.name }}"
       become: true
-      delegate_to: "{{ report_webserver }}"
-      tags: [always]
 
     - name: Copy static files
       copy:
@@ -64,26 +93,19 @@
         - red.png
         - green.png
       become: true
-      delegate_to: "{{ report_webserver }}"
-      tags: [always]
 
     - name: Generate pool report
       template: 
         src: "../templates/poolindex.j2"
         dest: "{{ report_folder }}poolindex.html"
       become: true
-      delegate_to: "{{ report_webserver }}"
-      tags: [always]
 
     - name: Generate pool member report 
       template: 
         src: "../templates/memberlist.j2"
         dest: "{{ report_folder }}{{ item.name }}_members.html"
       loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
-      loop_control:
-        label: "{{ item.name }}"
+      # loop_control:
+      #   label: "{{ item.name }}"
       become: true
-      delegate_to: "{{ report_webserver }}"
-      tags: [always]
-
 
