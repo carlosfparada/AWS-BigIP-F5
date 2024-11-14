@@ -61,6 +61,10 @@
         - "{{ f5_report_folder }}/green.png"
       become: true
 
+    - name: a
+      debug:
+        var: hostvars[groups['bigipf5'][0]]
+
     - name: Clean old member reports
       file: 
         path: "{{ f5_report_folder }}/{{ item.name }}_members.html"
