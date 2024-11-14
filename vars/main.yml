@@ -56,6 +56,15 @@ f5_device_info_subset:
   - virtual-addresses
   - virtual-servers
 
+# Report
+f5_device_info_subset:
+#  - all
+  - system-info
+  - nodes
+  - ltm-pools
+  - virtual-addresses
+  - virtual-servers
+
 # CMDB
 nodes:
   - name: "webserver-1"
