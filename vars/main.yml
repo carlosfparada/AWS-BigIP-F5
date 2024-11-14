@@ -48,7 +48,7 @@ ec2_rhel_keypair_name: "KeyPair-Virginia"
 ec2_rhel_backup_folder: /tmp/backup
 
 # Gather Facts
-f5_report_folder: /tmp
+f5_report_folder: /tmp/report
 
 # Report
 f5_device_info_subset:
