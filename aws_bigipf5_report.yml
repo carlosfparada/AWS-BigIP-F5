@@ -46,7 +46,7 @@
   tasks:
     - name: Ensure data folder exists
       file: 
-        path: "{{ report_folder }}"
+        path: "{{ f5_report_folder }}"
         state: directory
       become: true
 
@@ -55,15 +55,15 @@
         path: "{{ item }}"
         state: absent
       loop:
-        - "{{ report_folder }}poolindex.html"
-        - "{{ report_folder }}main.css"
-        - "{{ report_folder }}red.png"
-        - "{{ report_folder }}green.png"
+        - "{{ f5_report_folder }}/poolindex.html"
+        - "{{ f5_report_folder }}/main.css"
+        - "{{ f5_report_folder }}/red.png"
+        - "{{ f5_report_folder }}/green.png"
       become: true
 
     - name: Clean old member reports
       file: 
-        path: "{{ report_folder }}{{ item.name }}_members.html"
+        path: "{{ f5_report_folder }}/{{ item.name }}_members.html"
         state: absent
       loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
       # loop_control:
@@ -73,7 +73,7 @@
     - name: Copy static files
       copy:
         src: "../files/{{ item }}"
-        dest: "{{ report_folder }}{{item}}"
+        dest: "{{ f5_report_folder }}/{{item}}"
       loop:
         - main.css
         - red.png
@@ -83,13 +83,13 @@
     - name: Generate pool report
       template: 
         src: "../templates/poolindex.j2"
-        dest: "{{ report_folder }}poolindex.html"
+        dest: "{{ f5_report_folder }}/poolindex.html"
       become: true
 
     - name: Generate pool member report 
       template: 
         src: "../templates/memberlist.j2"
-        dest: "{{ report_folder }}{{ item.name }}_members.html"
+        dest: "{{ f5_report_folder }}/{{ item.name }}_members.html"
       loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
       # loop_control:
       #   label: "{{ item.name }}"

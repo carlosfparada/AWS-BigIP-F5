@@ -48,13 +48,7 @@ ec2_rhel_keypair_name: "KeyPair-Virginia"
 ec2_rhel_backup_folder: /tmp/backup
 
 # Gather Facts
-f5_device_info_subset:
-#  - all
-  - system-info
-  - nodes
-  - ltm-pools
-  - virtual-addresses
-  - virtual-servers
+f5_report_folder: /tmp
 
 # Report
 f5_device_info_subset:
