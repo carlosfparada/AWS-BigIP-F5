@@ -48,12 +48,14 @@
     - name: Set Provider BigIP F5 Data
       set_fact:
         f5_provider:
-            server: "{{ hostvars[groups['bigipf5'][0]].network_interfaces[0].association.public_ip }}"
+            server: "{{ item.association.public_ip }}"
             server_port: 443
             user: "{{ ec2_bigipf5_user }}"
             password: "{{ ec2_bigipf5_pass }}"
             validate_certs: no
             no_f5_teem: false
+      loop: "{{ hostvars[groups['bigipf5'][0]].network_interfaces }}"
+      when: item.association is defined and item.association.public_ip is defined
 
     # - name: Downloads (upload) UCS (User Configuration Set)
     #   f5networks.f5_modules.bigip_ucs:
