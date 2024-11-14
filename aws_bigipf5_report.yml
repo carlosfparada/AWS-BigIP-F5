@@ -77,7 +77,7 @@
       file: 
         path: "{{ f5_report_folder }}/{{ item.name }}_members.html"
         state: absent
-      loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
+      loop: "{{ hostvars['localhost']._pools.ansible_facts.ansible_net_ltm_pools }}"
       # loop_control:
       #   label: "{{ item.name }}"
       become: true
@@ -102,7 +102,7 @@
       template: 
         src: "../templates/memberlist.j2"
         dest: "{{ f5_report_folder }}/{{ item.name }}_members.html"
-      loop: "{{ _pools.ansible_facts.ansible_net_ltm_pools }}"
+      loop: "{{ hostvars['localhost']._pools.ansible_facts.ansible_net_ltm_pools }}"
       # loop_control:
       #   label: "{{ item.name }}"
       become: true
