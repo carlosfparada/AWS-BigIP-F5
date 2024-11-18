@@ -83,7 +83,7 @@
 - name: Get BigIP F5 AMI by Name
   amazon.aws.ec2_ami_info:
     filters:
-      #image-id: "{{ ec2_bigipf5_image_id }}"
+      #image_id: "{{ ec2_bigipf5_image_id }}"
       name: "{{ ec2_bigipf5_image_name }}"
     region: "{{ ec2_vpc_region }}"
   register: ami_bigipf5_find
@@ -134,7 +134,7 @@
 - name: Get RHEL AMI by Name
   amazon.aws.ec2_ami_info:
     filters:
-      #image-id: "{{ ec2_rhel_image_id }}"
+      #image_id: "{{ ec2_rhel_image_id }}"
       name: "{{ ec2_rhel_image_name }}"
     region: "{{ ec2_vpc_region }}"
   register: ami_bigipf5_find
