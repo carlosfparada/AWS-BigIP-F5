@@ -42,7 +42,7 @@
   hosts: "{{ groups['rhelserver'][0] }}"
   connection: ssh
   vars_files: vars/main.yml
-  gather_facts: yes
+  gather_facts: no
   vars:
     ansible_user: root
   tasks:
