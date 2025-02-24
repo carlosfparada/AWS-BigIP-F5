@@ -35,6 +35,8 @@ ec2_bigipf5_user: "{{ ansible_user | default('admin') }}"
 ec2_bigipf5_pass: "{{ ansible_password | default('adminadmin') }}" 
 # ec2_bigipf5_user: '{{ lookup("env", "ANSIBLE_NET_USERNAME") }}'
 # ec2_bigipf5_pass: '{{ lookup("env", "ANSIBLE_NET_PASSWORD") }}'
+ec2_rhel_user: "ec2-user"
+ec2_rhel_pass: "{{ ansible_password }}"
 
 # RHEL instance
 ec2_rhel_instance_name: rhelserver-1
