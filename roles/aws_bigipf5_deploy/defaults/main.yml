@@ -36,8 +36,8 @@ ec2_bigipf5_pass: "{{ ansible_password | default('adminadmin') }}"
 
 # RHEL instance
 ec2_rhel_instance_name: rhelserver-1
-#ec2_rhel_image_id: 
-ec2_rhel_image_name: Red Hat Enterprise Linux 9*
+#ec2_rhel_image_id: ami-0f2f686f34de7c86e
+ec2_rhel_image_name: RHEL-9.5_HVM*
 ec2_rhel_flavor_name: t2.micro
 ec2_rhel_disk_size: 20
 ec2_rhel_ebs_name: /dev/sda1
