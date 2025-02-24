@@ -1,3 +1,0 @@
-#cloud-config
-user: {{ ec2_rhel_user }}
-password: {{ ec2_rhel_pass }}
