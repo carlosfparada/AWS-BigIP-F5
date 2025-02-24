@@ -31,10 +31,10 @@ ec2_bigipf5_image_id: ami-07b95e48f28d08f54
 ec2_bigipf5_image_name: "F5 BIGIP-17.1.1.4-0.100.9 PAYG-Good 25Mbps-241016111301-8e1217d4-a046-4cdf-894e-e38175bae37f"
 ec2_bigipf5_flavor_name: t2.medium
 ec2_bigipf5_keypair_name: "KeyPair-Virginia"
-# ec2_bigipf5_user: "{{ ansible_ssh_user }}"
-# ec2_bigipf5_pass: "{{ ansible_ssh_pass }}"
-ec2_bigipf5_user: '{{ lookup("env", "ANSIBLE_NET_USERNAME") }}'
-ec2_bigipf5_pass: '{{ lookup("env", "ANSIBLE_NET_PASSWORD") }}'
+ec2_bigipf5_user: "{{ ansible_username | default('admin') }}" 
+ec2_bigipf5_pass: "{{ ansible_password | default('adminadmin') }}" 
+# ec2_bigipf5_user: '{{ lookup("env", "ANSIBLE_NET_USERNAME") }}'
+# ec2_bigipf5_pass: '{{ lookup("env", "ANSIBLE_NET_PASSWORD") }}'
 
 # RHEL instance
 ec2_rhel_instance_name: rhelserver-1
