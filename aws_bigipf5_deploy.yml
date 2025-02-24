@@ -5,28 +5,3 @@
   vars_files: vars/main.yml
   roles:
     - aws_bigipf5_deploy
-    - utils_hosts_aws
-
-- name: Generate report files
-  hosts: "{{ groups['rhelserver'][0] }}"
-  connection: ssh
-  vars_files: vars/main.yml
-  gather_facts: no
-  vars:
-    ansible_user: ec2-user
-  tasks:
-    - name: Attach Red Hat subscription
-      community.general.redhat_subscription:
-        state: present
-        username: "{{ subscription_user }}"
-        password: "{{ subscription_pass }}"
-        pool_ids: "{{ rh_subs_pool_id }}"
-      become: true
-
-    - name: Install RHEL packages
-      ansible.builtin.dnf:
-        name:
-          - python3
-        state: present
-      become: yes
-
