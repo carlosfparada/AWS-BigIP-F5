@@ -44,7 +44,7 @@
   vars_files: vars/main.yml
   gather_facts: no
   vars:
-    ansible_user: root
+    ansible_user: ec2-user
   tasks:
     - name: Ensure data folder exists
       file: 
