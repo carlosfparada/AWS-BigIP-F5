@@ -155,7 +155,7 @@
         ebs:
           volume_size: "{{ ec2_disk_size | default(ec2_rhel_disk_size, true) }}"
           delete_on_termination: true
-    # user_data: "{{ lookup('ansible.builtin.template', 'user_data_rhel.j2') }}"
+    user_data: "{{ lookup('ansible.builtin.template', 'user_data_rhel.j2') }}"
     tags:
       Name: "{{ ec2_rhel_instance_name }}"
     state: running
