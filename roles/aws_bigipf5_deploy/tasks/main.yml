@@ -194,3 +194,4 @@
 - name: Print RHEL instance details
   ansible.builtin.debug:
     msg: "RHEL Instance ssh ready at ssh root@{{ ec2_rhel_instance.instances[0].public_ip_address }}"
+
