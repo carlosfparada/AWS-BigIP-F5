@@ -63,18 +63,6 @@
         - "{{ f5_report_folder }}/green.png"
       become: true
 
-    - name: a
-      debug:
-        var: hostvars['localhost']
-
-    - name: a
-      debug:
-        var: hostvars['localhost']._pools
-
-    - name: a
-      debug:
-        var: hostvars[groups['bigipf5'][0]]._pools
-
     - name: Clean old member reports
       file: 
         path: "{{ f5_report_folder }}/{{ item.name }}_members.html"
