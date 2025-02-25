@@ -183,9 +183,9 @@
     delay: 30
     host: "{{ ec2_rhel_instance.instances[0].public_ip_address }}"
 
-- name: Sleep for 60 seconds and continue
+- name: Sleep for 120 seconds and continue
   wait_for:
-    timeout: 60
+    timeout: 120
 
 - name: Print BigIP F5 instance details
   ansible.builtin.debug:
