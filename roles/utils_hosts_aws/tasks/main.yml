@@ -7,7 +7,8 @@
   set_fact:
     node_name: "{{ item }}"
   loop: "{{ groups['all'] }}"
-  when: hostvars[item].tags is defined and hostvars[item].tags.Name | regex_search("^bigipf5-(.*)$")
+  #when: hostvars[item].tags is defined and hostvars[item].tags.Name | regex_search("^bigipf5-(.*)$")
+  when: hostvars[item].tags is defined and hostvars[item].tags.Name is match("^bigipf5-(.*)$")
 
 - name: Add BigIP F5 node to the bigipf5 group
   add_host:
@@ -19,7 +20,8 @@
   set_fact:
     node_name: "{{ item }}"
   loop: "{{ groups['all'] }}"
-  when: hostvars[item].tags is defined and hostvars[item].tags.Name | regex_search("^rhelserver-(.*)$")
+  #when: hostvars[item].tags is defined and hostvars[item].tags.Name | regex_search("^rhelserver-(.*)$")
+  when: hostvars[item].tags is defined and hostvars[item].tags.Name is match("^rhelserver-(.*)$")
 
 - name: Add RHEL node to the rhel group
   add_host:
