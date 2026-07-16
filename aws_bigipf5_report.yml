@@ -102,7 +102,8 @@
     - name: Generate pool report
       template: 
         src: "templates/poolindex.j2"
-        dest: "{{ f5_report_folder }}/poolindex.html"
+        # dest: "{{ f5_report_folder }}/poolindex.html"
+        dest: "{{ f5_report_folder }}/index.html"
       become: true
 
     - name: Generate pool member report 
