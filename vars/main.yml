@@ -48,7 +48,8 @@ ec2_rhel_pass: "{{ ansible_password }}"
 ec2_rhel_backup_folder: /tmp/backup
 
 # Gather Facts
-f5_report_folder: /tmp/report
+#f5_report_folder: /tmp/report
+f5_report_folder: /var/www/html
 
 # Report
 f5_device_info_subset:
