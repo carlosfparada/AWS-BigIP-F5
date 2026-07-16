@@ -73,7 +73,8 @@
         path: "{{ item }}"
         state: absent
       loop:
-        - "{{ f5_report_folder }}/poolindex.html"
+        - "{{ f5_report_folder }}/index.html"
+        # - "{{ f5_report_folder }}/poolindex.html"
         - "{{ f5_report_folder }}/main.css"
         - "{{ f5_report_folder }}/red.png"
         - "{{ f5_report_folder }}/green.png"
