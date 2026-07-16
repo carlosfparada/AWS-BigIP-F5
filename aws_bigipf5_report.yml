@@ -46,6 +46,48 @@
   vars:
     ansible_user: ec2-user
   tasks:
+    - name: Install Software
+      ansible.builtin.dnf:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - firewalld
+          - httpd
+          - php 
+          - php-common
+      become: yes
+
+    - name: Open port TCP 80
+      ansible.posix.firewalld:
+        port: http/tcp
+        permanent: yes
+        state: enabled
+      become: true
+
+    # - name: Webpage template
+    #   ansible.builtin.template:
+    #     src: ../templates/webpage.html.j2
+    #     dest: /var/www/html/index.html
+    #     owner: apache
+    #     mode: "0644"
+    #   become: yes
+
+    - name: Start firewalld
+      ansible.builtin.service:
+        name: firewalld
+        enabled: yes
+        state: restarted
+      become: true
+
+    - name: Restart httpd server 
+      ansible.builtin.service: 
+        name: httpd
+        enabled: yes
+        state: restarted
+      become: yes
+    
+
     - name: Ensure data folder exists
       file: 
         path: "{{ f5_report_folder }}"
